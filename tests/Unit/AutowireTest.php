@@ -70,21 +70,6 @@ it('can be autowired', function (Example $object): void {
 })->with('mock');
 
 it('can be autowired and read arguments', function (Example $object): void {
-    // @var Example $object
-    autowire(
-        Example::class,
-        [
-            'dateTimeUnion' => new DateTime('2000-01-02 00:00:00'),
-            'dateTimeIntersection' => new DateTime('2000-01-03 00:00:00'),
-            'string' => 'string',
-            'int' => 1,
-            'float' => 1.1,
-            'bool' => true,
-            'array' => [1, 2, 3],
-            'enum' => ExampleEnum::TEST,
-        ],
-    );
-
     expect(
         [
             'dateTimeUnion' => argument('dateTimeUnion'),
