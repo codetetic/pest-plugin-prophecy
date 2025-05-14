@@ -24,26 +24,15 @@ it('can be asserted with type()', function (): void {
         ->toBe('result');
 });
 
-class ArgumentTest1
-{
-    public function test(stdClass $object): string
-    {
-        return 'test';
-    }
-}
-
 it('can be asserted with which()', function (): void {
-    $mock = prophesize(ArgumentTest1::class);
+    $mock = prophesize(DateTime::class);
 
     $mock
-        ->test(which('format', 'string'))
-        ->willReturn('result');
+        ->add(which('d', 1))
+        ->willReturn($mock->reveal());
 
-    $object = new stdClass();
-    $object->format = 'string';
-
-    expect($mock->reveal()->test($object))
-        ->toBe('result');
+    expect($mock->reveal()->add(new DateInterval('P1D')))
+        ->toBe($mock->reveal());
 });
 
 it('can be asserted with that()', function (): void {
