@@ -61,9 +61,9 @@ it('can be a complex autowire', function (): void {
 
     $mock = argument('defaultDateTime');
     $mock->format(DateTimeInterface::ATOM)->willReturn('formatted2');
-    expect(
-        $object
-    )->toMatchSnapshot();
+
+    expect($object)
+        ->toMatchSnapshot();
 
     expect(
         [

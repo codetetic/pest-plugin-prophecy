@@ -12,15 +12,12 @@ class Example
 it('can be autowired', function (): void {
     $object = autowire(Example::class);
 
-    expect(
-        $object
-    )->toBeInstanceOf(Example::class);
+    expect($object)
+        ->toBeInstanceOf(Example::class);
 
-    expect(
-        $object->dateTime
-    )->toBeInstanceOf(DateTime::class);
+    expect($object->dateTime)
+        ->toBeInstanceOf(DateTime::class);
 
-    expect(
-        argument('dateTime')
-    )->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
+    expect(argument('dateTime'))
+        ->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
 });
