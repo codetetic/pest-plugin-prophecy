@@ -1,0 +1,36 @@
+{
+    "name": "codetetic/pest-plugin-prophecy",
+    "description": "Pest Prophecy Plugin",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Peter Measham",
+            "email": "github@codetetic.co.uk"
+        }
+    ],
+    "require": {
+        "php": "^8.2.0",
+        "pestphp/pest": "^3.8",
+        "phpspec/prophecy": "^1.22",
+        "phpspec/prophecy-phpunit": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pest\\Prophecy\\": "src/"
+        },
+        "files": [
+            "src/Autoload.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
