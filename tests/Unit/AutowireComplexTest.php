@@ -11,7 +11,6 @@ class ExampleComplex implements JsonSerializable
 {
     public function __construct(
         public DateTime $dateTime,
-        public DateTime $dateTimeWithDefault = new DateTime('2000-01-01 00:00:00'),
         public DateTime|DateTimeImmutable $dateTimeUnion,
         public DateTime&DateTimeInterface $dateTimeIntersection,
         public string $string,
@@ -21,13 +20,13 @@ class ExampleComplex implements JsonSerializable
         public array $array,
         public ExampleComplexEnum $enum,
         public string $default = 'default',
+        public DateTime $defaultDateTime = new DateTime('2000-01-01 00:00:00'),
     ) {}
 
     public function jsonSerialize(): mixed
     {
         return [
             'dateTime' => $this->dateTime->format(DateTimeInterface::ATOM),
-            'dateTimeWithDefault' => $this->dateTimeWithDefault->format(DateTimeInterface::ATOM),
             'dateTimeUnion' => $this->dateTimeUnion,
             'dateTimeIntersection' => $this->dateTimeIntersection,
             'string' => $this->string,
@@ -37,6 +36,7 @@ class ExampleComplex implements JsonSerializable
             'array' => $this->array,
             'enum' => $this->enum->value,
             'default' => $this->default,
+            'defaultDateTime' => $this->defaultDateTime->format(DateTimeInterface::ATOM),
         ];
     }
 }
@@ -59,7 +59,7 @@ it('can be a complex autowire', function (): void {
     $mock = argument('dateTime');
     $mock->format(DateTimeInterface::ATOM)->willReturn('formatted1');
 
-    $mock = argument('dateTimeWithDefault');
+    $mock = argument('defaultDateTime');
     $mock->format(DateTimeInterface::ATOM)->willReturn('formatted2');
     expect(
         $object
@@ -68,7 +68,6 @@ it('can be a complex autowire', function (): void {
     expect(
         [
             'dateTime' => get_class(argument('dateTime')),
-            'dateTimeWithDefault' => get_class(argument('dateTimeWithDefault')),
             'dateTimeUnion' => argument('dateTimeUnion'),
             'dateTimeIntersection' => argument('dateTimeIntersection'),
             'string' => argument('string'),
@@ -78,6 +77,7 @@ it('can be a complex autowire', function (): void {
             'array' => argument('array'),
             'enum' => argument('enum'),
             'default' => argument('default'),
+            'defaultDateTime' => get_class(argument('defaultDateTime')),
         ],
     )->toMatchSnapshot();
 });

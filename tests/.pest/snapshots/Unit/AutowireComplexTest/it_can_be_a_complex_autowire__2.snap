@@ -1,6 +1,5 @@
 {
     "dateTime": "Prophecy\\Prophecy\\ObjectProphecy",
-    "dateTimeWithDefault": "Prophecy\\Prophecy\\ObjectProphecy",
     "dateTimeUnion": {
         "date": "2000-01-02 00:00:00.000000",
         "timezone_type": 3,
@@ -21,5 +20,6 @@
         3
     ],
     "enum": "test",
-    "default": "default"
+    "default": "default",
+    "defaultDateTime": "Prophecy\\Prophecy\\ObjectProphecy"
 }
