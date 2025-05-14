@@ -24,24 +24,35 @@ class Example
 }
 
 it('can be autowired', function (): void {
+    // @var Example $object
+    $object = autowire(
+        Example::class,
+        [
+            'dateTimeUnion' => new DateTime('2000-01-02 00:00:00'),
+            'dateTimeIntersection' => new DateTime('2000-01-03 00:00:00'),
+            'string' => 'string',
+            'int' => 1,
+            'float' => 1.1,
+            'bool' => true,
+            'enum' => ExampleEnum::TEST,
+        ],
+    );
+
     expect(
-        autowire(
-            Example::class,
-            [
-                'dateTimeUnion' => new DateTime('2000-01-02 00:00:00'),
-                'dateTimeIntersection' => new DateTime('2000-01-03 00:00:00'),
-                'string' => 'string',
-                'int' => 1,
-                'float' => 1.1,
-                'bool' => true,
-                'enum' => ExampleEnum::TEST,
-            ],
-        ),
+        $object
     )->toBeInstanceOf(Example::class);
 
     expect(
         argument('dateTime')
     )->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
+
+    expect(
+        $object->dateTime,
+    )->toBeInstanceOf(DateTime::class);
+
+    expect(
+        get_class($object->dateTime)
+    )->toBe('Double\DateTime\P1');
 
     expect(
         argument('dateTimeUnion')
