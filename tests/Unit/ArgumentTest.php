@@ -4,7 +4,6 @@ use function Pest\Prophecy\{prophesize, exact, type, which, that, any};
 
 it('can be asserted with exact()', function (): void {
     $mock = prophesize(DateTime::class);
-
     $mock
         ->format(exact('format'))
         ->willReturn('result');
@@ -15,7 +14,6 @@ it('can be asserted with exact()', function (): void {
 
 it('can be asserted with type()', function (): void {
     $mock = prophesize(DateTime::class);
-
     $mock
         ->format(type('string'))
         ->willReturn('result');
@@ -26,7 +24,6 @@ it('can be asserted with type()', function (): void {
 
 it('can be asserted with which()', function (): void {
     $mock = prophesize(DateTime::class);
-
     $mock
         ->add(which('d', 1))
         ->willReturn($mock->reveal());
@@ -36,14 +33,14 @@ it('can be asserted with which()', function (): void {
 });
 
 it('can be asserted with that()', function (): void {
-    $mock = prophesize(DateTime::class);
+    $callback = function(string $format): bool {
+        expect($format)->toBe('format');
+        return $format === 'format';
+    };
 
+    $mock = prophesize(DateTime::class);
     $mock
-        ->format(
-            that(function(string $format): bool {
-                expect($format)->toBe('format');
-                return $format === 'format';
-            }))
+        ->format(that($callback))
         ->willReturn('result');
 
     expect($mock->reveal()->format('format'))
@@ -52,7 +49,6 @@ it('can be asserted with that()', function (): void {
 
 it('can be asserted with any()', function (): void {
     $mock = prophesize(DateTime::class);
-
     $mock
         ->format(any())
         ->willReturn('result');
