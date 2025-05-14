@@ -1,6 +1,6 @@
 <?php
 
-use function Pest\Prophecy\{autowire, argument, any};
+use function Pest\Prophecy\{autowire, argument};
 
 enum ExampleComplexEnum: string
 {
