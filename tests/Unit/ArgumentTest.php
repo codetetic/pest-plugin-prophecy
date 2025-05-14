@@ -1,6 +1,6 @@
 <?php
 
-use function Pest\Prophecy\{prophesize, exact, type, which, that, any};
+use function Pest\Prophecy\{prophesize, exact, type, which, that, any, cetera, allOf};
 
 it('can be asserted with exact()', function (): void {
     $mock = prophesize(DateTime::class);
@@ -51,6 +51,26 @@ it('can be asserted with any()', function (): void {
     $mock = prophesize(DateTime::class);
     $mock
         ->format(any())
+        ->willReturn('result');
+
+    expect($mock->reveal()->format('format'))
+        ->toBe('result');
+});
+
+it('can be asserted with cetera()', function (): void {
+    $mock = prophesize(DateTime::class);
+    $mock
+        ->format(cetera())
+        ->willReturn('result');
+
+    expect($mock->reveal()->format('format'))
+        ->toBe('result');
+});
+
+it('can be asserted with allOf()', function (): void {
+    $mock = prophesize(DateTime::class);
+    $mock
+        ->format(allOf(exact('format'), type('string')))
         ->willReturn('result');
 
     expect($mock->reveal()->format('format'))
