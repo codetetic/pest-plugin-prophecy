@@ -17,6 +17,7 @@ trait ProphecyTrait
 
     public function autowire(string $class, array $defaults = []): object
     {
+        $this->arguments = [];
         $reflected = new ReflectionClass($class);
 
         $parameters = $reflected->getConstructor()?->getParameters() ?? [];
