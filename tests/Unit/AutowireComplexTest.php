@@ -41,8 +41,8 @@ class ExampleComplex implements JsonSerializable
     }
 }
 
-dataset('mock', [
-    fn() => autowire(
+it('can be a complex autowire', function (): void {
+    $object = autowire(
         ExampleComplex::class,
         [
             'dateTimeUnion' => new DateTime('2000-01-02 00:00:00'),
@@ -54,22 +54,17 @@ dataset('mock', [
             'array' => [1, 2, 3],
             'enum' => ExampleComplexEnum::TEST,
         ],
-    ),
-]);
+    );
 
-it('can be a complex autowire', function (ExampleComplex $object): void {
     $mock = argument('dateTime');
     $mock->format(DateTimeInterface::ATOM)->willReturn('formatted1');
 
     $mock = argument('dateTimeWithDefault');
     $mock->format(DateTimeInterface::ATOM)->willReturn('formatted2');
-
     expect(
         $object
     )->toMatchSnapshot();
-})->with('mock');
 
-it('can access all arguments from complex autowire', function (ExampleComplex $object): void {
     expect(
         [
             'dateTime' => get_class(argument('dateTime')),
@@ -85,4 +80,4 @@ it('can access all arguments from complex autowire', function (ExampleComplex $o
             'default' => argument('default'),
         ],
     )->toMatchSnapshot();
-})->with('mock');
+});
