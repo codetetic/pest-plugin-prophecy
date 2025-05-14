@@ -15,7 +15,20 @@ trait ProphecyTrait
 
     protected array $arguments = [];
 
-    public function autowire(string $class, array $defaults = []): object
+    protected ?ObjectProphecy $last = null;
+
+    protected function prophesizeWithCache(?string $classOrInterface = null): ObjectProphecy
+    {
+        $this->last = $this->prophesize($classOrInterface);
+        return $this->last;
+    }
+
+    protected function getLastProphecy(): ?ObjectProphecy
+    {
+        return $this->last;
+    }
+
+    protected function autowire(string $class, array $defaults = []): object
     {
         $this->arguments = [];
         $reflected = new ReflectionClass($class);
@@ -41,7 +54,7 @@ trait ProphecyTrait
         );
     }
 
-    public function getArgument(string $key): mixed
+    protected function getArgument(string $key): mixed
     {
         if (isset($this->arguments[$key])) {
             return $this->arguments[$key];

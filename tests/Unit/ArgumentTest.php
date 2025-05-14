@@ -1,38 +1,35 @@
 <?php
 
-use function Pest\Prophecy\{prophesize, exact, type, which, that, any, cetera, allOf, size};
+use function Pest\Prophecy\{prophesize, reveal, exact, type, which, that, any, cetera, allOf, size};
 
 it('can be asserted with exact()', function (): void {
-    $mock = prophesize(DateTime::class);
-    $mock
+    prophesize(DateTime::class)
         ->format(exact('format'))
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect($mock->reveal()->format('format'))
+    expect(reveal()->format('format'))
         ->toBe('result');
 });
 
 it('can be asserted with type()', function (): void {
-    $mock = prophesize(DateTime::class);
-    $mock
+    prophesize(DateTime::class)
         ->format(type('string'))
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect($mock->reveal()->format('format'))
+    expect(reveal()->format('format'))
         ->toBe('result');
 });
 
 it('can be asserted with which()', function (): void {
-    $mock = prophesize(DateTime::class);
-    $mock
+    prophesize(DateTime::class)
         ->add(which('d', 1))
         ->shouldBeCalled()
-        ->willReturn($mock->reveal());
+        ->willReturn(reveal());
 
-    expect($mock->reveal()->add(new DateInterval('P1D')))
-        ->toBe($mock->reveal());
+    expect(reveal()->add(new DateInterval('P1D')))
+        ->toBe(reveal());
 });
 
 it('can be asserted with that()', function (): void {
@@ -41,56 +38,51 @@ it('can be asserted with that()', function (): void {
         return $format === 'format';
     };
 
-    $mock = prophesize(DateTime::class);
-    $mock
+    prophesize(DateTime::class)
         ->format(that($callback))
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect($mock->reveal()->format('format'))
+    expect(reveal()->format('format'))
         ->toBe('result');
 });
 
 it('can be asserted with any()', function (): void {
-    $mock = prophesize(DateTime::class);
-    $mock
+    prophesize(DateTime::class)
         ->format(any())
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect($mock->reveal()->format('format'))
+    expect(reveal()->format('format'))
         ->toBe('result');
 });
 
 it('can be asserted with cetera()', function (): void {
-    $mock = prophesize(DateTime::class);
-    $mock
+    prophesize(DateTime::class)
         ->format(cetera())
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect($mock->reveal()->format('format'))
+    expect(reveal()->format('format'))
         ->toBe('result');
 });
 
 it('can be asserted with allOf()', function (): void {
-    $mock = prophesize(DateTime::class);
-    $mock
+    prophesize(DateTime::class)
         ->format(allOf(exact('format'), type('string')))
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect($mock->reveal()->format('format'))
+    expect(reveal()->format('format'))
         ->toBe('result');
 });
 
 it('can be asserted with size()', function (): void {
-    $mock = prophesize(ArrayObject::class);
-    $mock
+    prophesize(ArrayObject::class)
         ->exchangeArray(size(1))
         ->shouldBeCalled()
         ->willReturn([2]);
 
-    expect($mock->reveal()->exchangeArray([1]))
+    expect(reveal()->exchangeArray([1]))
         ->toBe([2]);
 });

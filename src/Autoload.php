@@ -10,7 +10,12 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 function prophesize(?string $classOrInterface = null): ObjectProphecy
 {
-    return test()->prophesize($classOrInterface);
+    return test()->prophesizeWithCache($classOrInterface);
+}
+
+function reveal(): mixed
+{
+    return test()->getLastProphecy()->reveal();
 }
 
 function autowire(string $class, array $defaults = []): object
