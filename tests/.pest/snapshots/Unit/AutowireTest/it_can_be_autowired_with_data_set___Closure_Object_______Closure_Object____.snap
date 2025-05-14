@@ -1,0 +1,25 @@
+{
+    "dateTime": "formatted1",
+    "dateTimeWithDefault": "formatted2",
+    "dateTimeUnion": {
+        "date": "2000-01-02 00:00:00.000000",
+        "timezone_type": 3,
+        "timezone": "UTC"
+    },
+    "dateTimeIntersection": {
+        "date": "2000-01-03 00:00:00.000000",
+        "timezone_type": 3,
+        "timezone": "UTC"
+    },
+    "string": "string",
+    "int": 1,
+    "float": 1.1,
+    "bool": true,
+    "array": [
+        1,
+        2,
+        3
+    ],
+    "enum": "test",
+    "default": "default"
+}

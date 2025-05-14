@@ -1,13 +1,13 @@
 <?php
 
-use function Pest\Prophecy\{autowire, argument};
+use function Pest\Prophecy\{autowire, argument, any};
 
 enum ExampleEnum: string
 {
     case TEST = 'test';
 }
 
-class Example
+class Example implements JsonSerializable
 {
     public function __construct(
         public DateTime $dateTime,
@@ -18,14 +18,31 @@ class Example
         public int $int,
         public float $float,
         public bool $bool,
+        public array $array,
         public ExampleEnum $enum,
         public string $default = 'default',
     ) {}
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'dateTime' => $this->dateTime->format(DateTimeInterface::ATOM),
+            'dateTimeWithDefault' => $this->dateTimeWithDefault->format(DateTimeInterface::ATOM),
+            'dateTimeUnion' => $this->dateTimeUnion,
+            'dateTimeIntersection' => $this->dateTimeIntersection,
+            'string' => $this->string,
+            'int' => $this->int,
+            'float' => $this->float,
+            'bool' => $this->bool,
+            'array' => $this->array,
+            'enum' => $this->enum->value,
+            'default' => $this->default,
+        ];
+    }
 }
 
-it('can be autowired', function (): void {
-    // @var Example $object
-    $object = autowire(
+dataset('mock', [
+    fn() => autowire(
         Example::class,
         [
             'dateTimeUnion' => new DateTime('2000-01-02 00:00:00'),
@@ -34,59 +51,51 @@ it('can be autowired', function (): void {
             'int' => 1,
             'float' => 1.1,
             'bool' => true,
+            'array' => [1, 2, 3],
+            'enum' => ExampleEnum::TEST,
+        ],
+    ),
+]);
+
+it('can be autowired', function (Example $object): void {
+    $mock = argument('dateTime');
+    $mock->format(DateTimeInterface::ATOM)->willReturn('formatted1');
+
+    $mock = argument('dateTimeWithDefault');
+    $mock->format(DateTimeInterface::ATOM)->willReturn('formatted2');
+
+    expect(
+        $object
+    )->toMatchSnapshot();
+})->with('mock');
+
+it('can be autowired and read arguments', function (Example $object): void {
+    // @var Example $object
+    autowire(
+        Example::class,
+        [
+            'dateTimeUnion' => new DateTime('2000-01-02 00:00:00'),
+            'dateTimeIntersection' => new DateTime('2000-01-03 00:00:00'),
+            'string' => 'string',
+            'int' => 1,
+            'float' => 1.1,
+            'bool' => true,
+            'array' => [1, 2, 3],
             'enum' => ExampleEnum::TEST,
         ],
     );
 
     expect(
-        $object
-    )->toBeInstanceOf(Example::class);
-
-    expect(
-        argument('dateTime')
-    )->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
-
-    expect(
-        $object->dateTime,
-    )->toBeInstanceOf(DateTime::class);
-
-    expect(
-        get_class($object->dateTime)
-    )->toBe('Double\DateTime\P1');
-
-    expect(
-        argument('dateTimeUnion')
-    )->toBeInstanceOf(DateTime::class);
-
-    expect(
-        argument('dateTimeIntersection')
-    )->toBeInstanceOf(DateTime::class);
-
-    expect(
-        argument('string')
-    )->toBe('string');
-
-    expect(
-        argument('int')
-    )->toBe(1);
-
-    expect(
-        argument('float')
-    )->toBe(1.1);
-
-    expect(
-        argument('bool')
-    )->toBe(true);
-
-    expect(
-        argument('enum')
-    )->toBe(ExampleEnum::TEST);
-
-    expect(
-        argument('default')
-    )->toBe('default');
-
-    expect(
-        argument('dateTimeWithDefault')
-    )->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
-});
+        [
+            'dateTimeUnion' => argument('dateTimeUnion'),
+            'dateTimeIntersection' => argument('dateTimeIntersection'),
+            'string' => argument('string'),
+            'int' => argument('int'),
+            'float' => argument('float'),
+            'bool' => argument('bool'),
+            'array' => argument('array'),
+            'enum' => argument('enum'),
+            'default' => argument('default'),
+        ],
+    )->toMatchSnapshot();
+})->with('mock');
