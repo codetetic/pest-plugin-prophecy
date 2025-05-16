@@ -5,7 +5,7 @@ use function Pest\Prophecy\{autowire, argument};
 class Example
 {
     public function __construct(
-        public DateTime $dateTime,
+        public stdClass $object,
     ) {}
 }
 
@@ -15,9 +15,9 @@ it('can be autowired', function (): void {
     expect($object)
         ->toBeInstanceOf(Example::class);
 
-    expect($object->dateTime)
-        ->toBeInstanceOf(DateTime::class);
+    expect($object->object)
+        ->toBeInstanceOf(stdClass::class);
 
-    expect(argument('dateTime'))
+    expect(argument('object'))
         ->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
 });
