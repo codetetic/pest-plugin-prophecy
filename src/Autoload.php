@@ -8,6 +8,11 @@ use Prophecy\Argument;
 use Prophecy\Argument\Token;
 use Prophecy\Prophecy\ObjectProphecy;
 
+/**
+ * @template T of object
+ * @phpstan-param class-string<T>|null $classOrInterface
+ * @phpstan-return ($classOrInterface is null ? ObjectProphecy<object> : ObjectProphecy<T>)
+ */
 function prophesize(?string $classOrInterface = null): ObjectProphecy
 {
     return test()->prophesizeWithCache($classOrInterface);

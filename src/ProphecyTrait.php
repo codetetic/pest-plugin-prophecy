@@ -17,6 +17,11 @@ trait ProphecyTrait
 
     protected ?ObjectProphecy $last = null;
 
+    /**
+     * @template T of object
+     * @phpstan-param class-string<T>|null $classOrInterface
+     * @phpstan-return ($classOrInterface is null ? ObjectProphecy<object> : ObjectProphecy<T>)
+     */
     protected function prophesizeWithCache(?string $classOrInterface = null): ObjectProphecy
     {
         $this->last = $this->prophesize($classOrInterface);
