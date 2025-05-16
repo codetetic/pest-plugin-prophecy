@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pest\Prophecy;
 
 use InvalidArgumentException;
+use PHPUnit\Metadata\After;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionClass;
 use ReflectionNamedType;
@@ -14,23 +15,27 @@ trait ProphecyTrait
     use \Prophecy\PhpUnit\ProphecyTrait;
 
     protected array $arguments = [];
-
-    protected ?ObjectProphecy $last = null;
+    protected array $prophecies = [];
 
     /**
      * @template T of object
-     * @phpstan-param class-string<T>|null $classOrInterface
-     * @phpstan-return ($classOrInterface is null ? ObjectProphecy<object> : ObjectProphecy<T>)
+     * @phpstan-param class-string<T> $classOrInterface
+     * @phpstan-return ObjectProphecy<T>
      */
-    protected function prophesizeWithCache(?string $classOrInterface = null): ObjectProphecy
+    protected function prophesizeWithCache(string $classOrInterface, string $key = ''): ObjectProphecy
     {
-        $this->last = $this->prophesize($classOrInterface);
-        return $this->last;
+        $this->prophecies[$classOrInterface] = $this->prophesize($classOrInterface);
+        return $this->prophecies[$classOrInterface];
     }
 
-    protected function getLastProphecy(): ?ObjectProphecy
+    /**
+     * @template T of object
+     * @phpstan-param class-string<T> $classOrInterface
+     * @phpstan-return T
+     */
+    protected function getProphecy(string $classOrInterface, string $key = ''): ?ObjectProphecy
     {
-        return $this->last;
+        return $this->prophecies[$classOrInterface];
     }
 
     protected function autowire(string $class, array $defaults = []): object
@@ -65,5 +70,12 @@ trait ProphecyTrait
             return $this->arguments[$key];
         }
         return null;
+    }
+
+    #[After]
+    protected function resetArgumentsAndProphecies(): void
+    {
+        $this->arguments = [];
+        $this->prophecies = [];
     }
 }

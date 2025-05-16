@@ -13,16 +13,26 @@ use Prophecy\Prophecy\ObjectProphecy;
  * @phpstan-param class-string<T>|null $classOrInterface
  * @phpstan-return ($classOrInterface is null ? ObjectProphecy<object> : ObjectProphecy<T>)
  */
-function prophesize(?string $classOrInterface = null): ObjectProphecy
+function prophesize(?string $classOrInterface = null, string $key = ''): ObjectProphecy
 {
-    return test()->prophesizeWithCache($classOrInterface);
+    return test()->prophesizeWithCache($classOrInterface, $key);
 }
 
-function reveal(): mixed
+/**
+ * @template T of object
+ * @phpstan-param class-string<T> $classOrInterface
+ * @phpstan-return T
+ */
+function reveal(string $classOrInterface, string $key = ''): mixed
 {
-    return test()->getLastProphecy()->reveal();
+    return test()->getProphecy($classOrInterface, $key)->reveal();
 }
 
+/**
+ * @template T of object
+ * @phpstan-param class-string<T> $class
+ * @phpstan-return T
+ */
 function autowire(string $class, array $defaults = []): object
 {
     return test()->autowire($class, $defaults);

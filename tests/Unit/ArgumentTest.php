@@ -35,7 +35,7 @@ it('can be asserted with allOf()', function (): void {
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal()->string('format'))
+    expect(reveal(ExampleArgument::class)->string('format'))
         ->toBe('result');
 });
 
@@ -45,7 +45,7 @@ it('can be asserted with exact()', function (): void {
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal()->string('format'))
+    expect(reveal(ExampleArgument::class)->string('format'))
         ->toBe('result');
 });
 
@@ -55,7 +55,7 @@ it('can be asserted with type()', function (): void {
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal()->string('format'))
+    expect(reveal(ExampleArgument::class)->string('format'))
         ->toBe('result');
 });
 
@@ -70,7 +70,7 @@ it('can be asserted with that()', function (): void {
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal()->string('format'))
+    expect(reveal(ExampleArgument::class)->string('format'))
         ->toBe('result');
 });
 
@@ -80,7 +80,7 @@ it('can be asserted with any()', function (): void {
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal()->string('format'))
+    expect(reveal(ExampleArgument::class)->string('format'))
         ->toBe('result');
 });
 
@@ -90,7 +90,7 @@ it('can be asserted with cetera()', function (): void {
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal()->string('format'))
+    expect(reveal(ExampleArgument::class)->string('format'))
         ->toBe('result');
 });
 
@@ -100,7 +100,7 @@ it('can be asserted with not()', function (): void {
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal()->string('format'))
+    expect(reveal(ExampleArgument::class)->string('format'))
         ->toBe('result');
 });
 
@@ -110,7 +110,7 @@ it('can be asserted with containingString()', function (): void {
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal()->string('format'))
+    expect(reveal(ExampleArgument::class)->string('format'))
         ->toBe('result');
 });
 
@@ -120,7 +120,7 @@ it('can be asserted with is()', function (): void {
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal()->string('format'))
+    expect(reveal(ExampleArgument::class)->string('format'))
         ->toBe('result');
 });
 
@@ -130,7 +130,7 @@ it('can be asserted with in()', function (): void {
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal()->string('format'))
+    expect(reveal(ExampleArgument::class)->string('format'))
         ->toBe('result');
 });
 
@@ -140,7 +140,7 @@ it('can be asserted with notIn()', function (): void {
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal()->string('format'))
+    expect(reveal(ExampleArgument::class)->string('format'))
         ->toBe('result');
 });
 
@@ -150,7 +150,7 @@ it('can be asserted with size()', function (): void {
         ->shouldBeCalled()
         ->willReturn([2]);
 
-    expect(reveal()->array([1]))
+    expect(reveal(ExampleArgument::class)->array([1]))
         ->toBe([2]);
 });
 
@@ -160,7 +160,7 @@ it('can be asserted with withEntry()', function (): void {
         ->shouldBeCalled()
         ->willReturn([2]);
 
-    expect(reveal()->array(['a' => 1]))
+    expect(reveal(ExampleArgument::class)->array(['a' => 1]))
         ->toBe([2]);
 });
 
@@ -170,7 +170,7 @@ it('can be asserted with withEveryEntry()', function (): void {
         ->shouldBeCalled()
         ->willReturn([2]);
 
-    expect(reveal()->array([1, 1]))
+    expect(reveal(ExampleArgument::class)->array([1, 1]))
         ->toBe([2]);
 });
 
@@ -180,7 +180,7 @@ it('can be asserted with containing()', function (): void {
         ->shouldBeCalled()
         ->willReturn([2]);
 
-    expect(reveal()->array([1, 2, 3]))
+    expect(reveal(ExampleArgument::class)->array([1, 2, 3]))
         ->toBe([2]);
 });
 
@@ -190,7 +190,7 @@ it('can be asserted with withKey()', function (): void {
         ->shouldBeCalled()
         ->willReturn([2]);
 
-    expect(reveal()->array(['a' => 1]))
+    expect(reveal(ExampleArgument::class)->array(['a' => 1]))
         ->toBe([2]);
 });
 
@@ -198,13 +198,13 @@ it('can be asserted with which()', function (): void {
     prophesize(ExampleArgument::class)
         ->object(which('test1', 'test2'))
         ->shouldBeCalled()
-        ->willReturn(reveal());
+        ->willReturn(reveal(ExampleArgument::class));
 
     $object = new stdClass();
     $object->test1 = 'test2';
 
-    expect(reveal()->object($object))
-        ->toBe(reveal());
+    expect(reveal(ExampleArgument::class)->object($object))
+        ->toBe(reveal(ExampleArgument::class));
 });
 
 it('can be asserted with approximate()', function (): void {
@@ -213,6 +213,6 @@ it('can be asserted with approximate()', function (): void {
         ->shouldBeCalled()
         ->willReturn(3.1);
 
-    expect(reveal()->float(3.14159))
+    expect(reveal(ExampleArgument::class)->float(3.14159))
         ->toBe(3.1);
 });
