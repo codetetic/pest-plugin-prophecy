@@ -108,12 +108,12 @@ function approximate(float $value, int $precision = 0): Token\ApproximateValueTo
     return Argument::approximate($value, $precision);
 }
 
-function in(mixed $value): Token\InArrayToken
+function in(array $value): Token\InArrayToken
 {
     return Argument::in($value);
 }
 
-function notIn(mixed $value): Token\NotInArrayToken
+function notIn(array $value): Token\NotInArrayToken
 {
     return Argument::notIn($value);
 }
