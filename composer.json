@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "^8.2.0",
-        "pestphp/pest": "^3.8",
+        "pestphp/pest": "^2.36",
         "phpspec/prophecy": "^1.22",
         "phpspec/prophecy-phpunit": "^2.3"
     },
