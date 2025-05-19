@@ -33,6 +33,9 @@ final class ExampleAutowireWrapper
 it('can be autowired', function (): void {
     $object = autowire(ExampleAutowireWrapper::class);
 
+    expect(argument('object'))
+        ->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
+
     argument('object')
         ->string(exact('format'))
         ->shouldBeCalled()
@@ -43,9 +46,6 @@ it('can be autowired', function (): void {
 
     expect($object->object)
         ->toBeInstanceOf(ExampleAutowire::class);
-
-    expect(argument('object'))
-        ->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
 
     expect($object->string('format'))
         ->toBe('result');
