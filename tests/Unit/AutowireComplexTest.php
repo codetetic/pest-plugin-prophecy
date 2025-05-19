@@ -17,10 +17,12 @@ class ExampleComplexValue implements ExampleComplexValueInterface
 }
 
 class ExampleComplexValueImmutable
-{}
+{
+}
 
 interface ExampleComplexValueInterface
-{}
+{
+}
 
 enum ExampleComplexEnum: string
 {
@@ -83,7 +85,7 @@ it('can be a complex autowire', function (): void {
             'enum' => $object->enum->value,
             'default' => $object->default,
             'defaultvalue' => $object->defaultValue->value(),
-    ])->toMatchSnapshot();
+        ])->toMatchSnapshot();
 
     expect(
         [
