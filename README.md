@@ -14,7 +14,7 @@ This project is a Pest Prophecy Plugin that provides additional assertion capabi
 Install the package via Composer:
 
 ```bash
-composer require codetetic/pest-plugin-prophecy
+composer require --dev codetetic/pest-plugin-prophecy
 ```
 
 ## Usage

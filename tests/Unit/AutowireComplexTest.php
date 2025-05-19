@@ -3,6 +3,25 @@
 use function Pest\Prophecy\argument;
 use function Pest\Prophecy\autowire;
 
+class ExampleComplexValue implements ExampleComplexValueInterface
+{
+    public function __construct(
+        public string $value,
+    ) {
+    }
+
+    public function value(): string
+    {
+        return $this->value;
+    }
+}
+
+class ExampleComplexValueImmutable
+{}
+
+interface ExampleComplexValueInterface
+{}
+
 enum ExampleComplexEnum: string
 {
     case TEST = 'test';
@@ -11,9 +30,9 @@ enum ExampleComplexEnum: string
 class ExampleComplex
 {
     public function __construct(
-        public DateTime $dateTime,
-        public DateTime|DateTimeImmutable $dateTimeUnion,
-        public DateTime&DateTimeInterface $dateTimeIntersection,
+        public ExampleComplexValue $value,
+        public ExampleComplexValue|ExampleComplexValueImmutable $valueUnion,
+        public ExampleComplexValue&ExampleComplexValueInterface $valueIntersection,
         public string $string,
         public int $int,
         public float $float,
@@ -21,7 +40,7 @@ class ExampleComplex
         public array $array,
         public ExampleComplexEnum $enum,
         public string $default = 'default',
-        public DateTime $defaultDateTime = new DateTime('2000-01-01 00:00:00'),
+        public ExampleComplexValue $defaultValue = new ExampleComplexValue('value1'),
     ) {
     }
 }
@@ -30,8 +49,8 @@ it('can be a complex autowire', function (): void {
     $object = autowire(
         ExampleComplex::class,
         [
-            'dateTimeUnion' => new DateTime('2000-01-02 00:00:00'),
-            'dateTimeIntersection' => new DateTime('2000-01-03 00:00:00'),
+            'valueUnion' => new ExampleComplexValue('value2'),
+            'valueIntersection' => new ExampleComplexValue('value2'),
             'string' => 'string',
             'int' => 1,
             'float' => 1.1,
@@ -41,21 +60,21 @@ it('can be a complex autowire', function (): void {
         ],
     );
 
-    argument('dateTime')
-        ->format(DateTimeInterface::ATOM)
+    argument('value')
+        ->value()
         ->shouldBeCalled()
         ->willReturn('formatted1');
 
-    argument('defaultDateTime')
-        ->format(DateTimeInterface::ATOM)
+    argument('defaultValue')
+        ->value()
         ->shouldBeCalled()
         ->willReturn('formatted2');
 
     expect(
         [
-            'dateTime' => $object->dateTime->format(DateTimeInterface::ATOM),
-            'dateTimeUnion' => $object->dateTimeUnion,
-            'dateTimeIntersection' => $object->dateTimeIntersection,
+            'value' => $object->value->value(),
+            'valueUnion' => $object->valueUnion,
+            'valueIntersection' => $object->valueIntersection,
             'string' => $object->string,
             'int' => $object->int,
             'float' => $object->float,
@@ -63,14 +82,14 @@ it('can be a complex autowire', function (): void {
             'array' => $object->array,
             'enum' => $object->enum->value,
             'default' => $object->default,
-            'defaultDateTime' => $object->defaultDateTime->format(DateTimeInterface::ATOM),
+            'defaultvalue' => $object->defaultValue->value(),
     ])->toMatchSnapshot();
 
     expect(
         [
-            'dateTime' => argument('dateTime')::class,
-            'dateTimeUnion' => argument('dateTimeUnion'),
-            'dateTimeIntersection' => argument('dateTimeIntersection'),
+            'value' => argument('value')::class,
+            'valueUnion' => argument('valueUnion'),
+            'valueIntersection' => argument('valueIntersection'),
             'string' => argument('string'),
             'int' => argument('int'),
             'float' => argument('float'),
@@ -78,7 +97,7 @@ it('can be a complex autowire', function (): void {
             'array' => argument('array'),
             'enum' => argument('enum'),
             'default' => argument('default'),
-            'defaultDateTime' => argument('defaultDateTime')::class,
+            'defaultvalue' => argument('defaultValue')::class,
         ],
     )->toMatchSnapshot();
 });
