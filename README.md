@@ -28,30 +28,87 @@ Below are some example tests that demonstrate the features of this plugin:
 #### Autowire Example
 
 ```php
+use function Pest\Prophecy\argument;
+use function Pest\Prophecy\autowire;
+use function Pest\Prophecy\exact;
+
+class ExampleAutowire
+{
+    public function __construct(
+        public string $string,
+    ) {
+    }
+
+    public function string(string $string): string
+    {
+        return $string;
+    }
+}
+
+final class ExampleAutowireWrapper
+{
+    public function __construct(
+        public ExampleAutowire $object,
+    ) {
+    }
+
+    public function string(string $string): string
+    {
+        return $this->object->string($string);
+    }
+}
+
 it('can be autowired', function (): void {
-    $object = autowire(Example::class);
+    $object = autowire(ExampleAutowireWrapper::class);
+
+    argument('object')
+        ->string(exact('format'))
+        ->shouldBeCalled()
+        ->willReturn('result');
 
     expect($object)
-        ->toBeInstanceOf(Example::class);
+        ->toBeInstanceOf(ExampleAutowireWrapper::class);
 
     expect($object->object)
-        ->toBeInstanceOf(stdClass::class);
+        ->toBeInstanceOf(ExampleAutowire::class);
 
     expect(argument('object'))
         ->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
+
+    expect($object->string('format'))
+        ->toBe('result');
 });
 ```
 
 #### Argument Tests
 
 ```php
+use function Pest\Prophecy\prophesize;
+use function Pest\Prophecy\reveal;
+use function Pest\Prophecy\allOf;
+use function Pest\Prophecy\exact;
+use function Pest\Prophecy\type;
+
+class Example
+{
+    public function __construct(
+        public string $string,
+    ) {
+    }
+
+    public function string(string $string): string
+    {
+        return $string;
+    }
+}
+
 it('can be asserted with allOf()', function (): void {
-    prophesize(ExampleArgument::class)
+    prophesize(Example::class)
         ->string(allOf(exact('format'), type('string')))
         ->shouldBeCalled()
         ->willReturn('result');
 
-    expect(reveal(ExampleArgument::class)->string('format'))
+    expect(reveal(Example::class)->string('format'))
         ->toBe('result');
 });
 
