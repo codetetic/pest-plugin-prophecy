@@ -7,7 +7,7 @@ class Example
 {
 }
 
-it('can be accessed as function', function (): void {
+it('can be accessed as a function', function (): void {
     $prophecy = prophesize(Example::class);
 
     expect($prophecy)
@@ -17,7 +17,7 @@ it('can be accessed as function', function (): void {
         ->toBeInstanceOf(Example::class);
 });
 
-it('can be accessed as function with reveal helper', function (): void {
+it('can be accessed as a function and use reveal helper', function (): void {
     expect(prophesize(Example::class))
         ->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
 

@@ -25,6 +25,35 @@ This plugin provides a set of functions to enhance the Pest testing framework wi
 
 Below are some example tests that demonstrate the features of this plugin:
 
+#### Basic Example
+
+```php
+use function Pest\Prophecy\prophesize;
+use function Pest\Prophecy\reveal;
+
+class Example
+{
+}
+
+it('can be accessed as a function', function (): void {
+    $prophecy = prophesize(Example::class);
+
+    expect($prophecy)
+        ->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
+
+    expect($prophecy->reveal())
+        ->toBeInstanceOf(Example::class);
+});
+
+it('can be accessed as a function and use reveal helper', function (): void {
+    expect(prophesize(Example::class))
+        ->toBeInstanceOf(Prophecy\Prophecy\ObjectProphecy::class);
+
+    expect(reveal(Example::class))
+        ->toBeInstanceOf(Example::class);
+});
+```
+
 #### Autowire Example
 
 ```php
@@ -101,6 +130,16 @@ class Example
         return $string;
     }
 }
+
+it('can be asserted with allOf()', function (): void {
+    prophesize(Example::class)
+        ->string(allOf(exact('format'), type('string')))
+        ->shouldBeCalled()
+        ->willReturn('result');
+
+    expect(reveal(Example::class)->string('format'))
+        ->toBe('result');
+});
 
 it('can be asserted with allOf()', function (): void {
     prophesize(Example::class)
