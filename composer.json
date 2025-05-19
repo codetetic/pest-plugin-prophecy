@@ -38,6 +38,7 @@
         "symfony/var-dumper": "^6.4",
         "phpstan/phpstan": "^2.1",
         "jangregor/phpstan-prophecy": "^2.1",
-        "phpstan/extension-installer": "^1.4"
+        "phpstan/extension-installer": "^1.4",
+        "rector/rector": "^2.0"
     }
 }

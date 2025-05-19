@@ -71,7 +71,7 @@ it('can be a complex autowire', function (): void {
 
     expect(
         [
-            'dateTime' => get_class(argument('dateTime')),
+            'dateTime' => argument('dateTime')::class,
             'dateTimeUnion' => argument('dateTimeUnion'),
             'dateTimeIntersection' => argument('dateTimeIntersection'),
             'string' => argument('string'),
@@ -81,7 +81,7 @@ it('can be a complex autowire', function (): void {
             'array' => argument('array'),
             'enum' => argument('enum'),
             'default' => argument('default'),
-            'defaultDateTime' => get_class(argument('defaultDateTime')),
+            'defaultDateTime' => argument('defaultDateTime')::class,
         ],
     )->toMatchSnapshot();
 });
