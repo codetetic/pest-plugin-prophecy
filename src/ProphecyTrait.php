@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Pest\Prophecy;
 
-use InvalidArgumentException;
 use PHPUnit\Metadata\After;
 use Prophecy\Prophecy\ObjectProphecy;
-use ReflectionClass;
-use ReflectionNamedType;
 
 trait ProphecyTrait
 {
@@ -21,38 +18,45 @@ trait ProphecyTrait
 
     /**
      * @template T of object
+     *
      * @phpstan-param class-string<T> $classOrInterface
+     *
      * @phpstan-return ObjectProphecy<T>
      */
-    protected function prophesize(string $classOrInterface = null, string $key = ''): ObjectProphecy
+    protected function prophesize(?string $classOrInterface = null, string $key = ''): ObjectProphecy
     {
-        if (isset($this->prophecies[$classOrInterface . $key])) {
-            throw new InvalidArgumentException('Prophecy already exists.');
+        if (isset($this->prophecies[$classOrInterface.$key])) {
+            throw new \InvalidArgumentException('Prophecy already exists.');
         }
 
-        $this->prophecies[$classOrInterface . $key] = $this->baseProphesize($classOrInterface);
+        $this->prophecies[$classOrInterface.$key] = $this->baseProphesize($classOrInterface);
+
         return $this->prophecies[$classOrInterface];
     }
 
     /**
      * @template T of object
+     *
      * @phpstan-param class-string<T> $classOrInterface
+     *
      * @phpstan-return T|null
      */
     protected function getProphecy(string $classOrInterface, string $key = ''): ?ObjectProphecy
     {
-        return $this->prophecies[$classOrInterface . $key] ?? null;
+        return $this->prophecies[$classOrInterface.$key] ?? null;
     }
 
     /**
      * @template T of object
+     *
      * @phpstan-param class-string<T> $classOrInterface
+     *
      * @phpstan-return T
      */
     protected function autowire(string $classOrInterface, array $defaults = []): object
     {
         $this->arguments = [];
-        $reflected = new ReflectionClass($classOrInterface);
+        $reflected = new \ReflectionClass($classOrInterface);
 
         $parameters = $reflected->getConstructor()?->getParameters() ?? [];
         foreach ($parameters as $parameter) {
@@ -61,15 +65,15 @@ trait ProphecyTrait
 
             $this->arguments[$name] = match (true) {
                 isset($defaults[$name]) => $defaults[$name],
-                $type instanceof ReflectionNamedType && !$type->isBuiltin() => $this->baseProphesize($type->getName()),
+                $type instanceof \ReflectionNamedType && !$type->isBuiltin() => $this->baseProphesize($type->getName()),
                 $parameter->isDefaultValueAvailable() => $parameter->getDefaultValue(),
-                default => throw new InvalidArgumentException("Unable to autowire {$classOrInterface}: {$name} with {$type} mock"),
+                default => throw new \InvalidArgumentException("Unable to autowire {$classOrInterface}: {$name} with {$type} mock"),
             };
         }
 
         return $reflected->newInstanceArgs(
             array_map(
-                fn(mixed $mixed): mixed => $mixed instanceof ObjectProphecy? $mixed->reveal(): $mixed,
+                fn (mixed $mixed): mixed => $mixed instanceof ObjectProphecy ? $mixed->reveal() : $mixed,
                 $this->arguments,
             ),
         );

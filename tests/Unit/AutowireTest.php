@@ -1,12 +1,14 @@
 <?php
 
-use function Pest\Prophecy\{autowire, argument};
+use function Pest\Prophecy\argument;
+use function Pest\Prophecy\autowire;
 
 class Example
 {
     public function __construct(
         public stdClass $object,
-    ) {}
+    ) {
+    }
 }
 
 it('can be autowired', function (): void {

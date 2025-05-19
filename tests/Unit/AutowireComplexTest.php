@@ -1,6 +1,7 @@
 <?php
 
-use function Pest\Prophecy\{autowire, argument};
+use function Pest\Prophecy\argument;
+use function Pest\Prophecy\autowire;
 
 enum ExampleComplexEnum: string
 {
@@ -21,7 +22,8 @@ class ExampleComplex implements JsonSerializable
         public ExampleComplexEnum $enum,
         public string $default = 'default',
         public DateTime $defaultDateTime = new DateTime('2000-01-01 00:00:00'),
-    ) {}
+    ) {
+    }
 
     public function jsonSerialize(): mixed
     {

@@ -1,10 +1,25 @@
 <?php
 
-use function Pest\Prophecy\{
-    prophesize, reveal,
-    allOf, approximate, any, cetera, containing, containingString, exact, in,
-    is, not, notIn, size, that, type, which, withEntry, withEveryEntry, withKey,
-};
+use function Pest\Prophecy\allOf;
+use function Pest\Prophecy\any;
+use function Pest\Prophecy\approximate;
+use function Pest\Prophecy\cetera;
+use function Pest\Prophecy\containing;
+use function Pest\Prophecy\containingString;
+use function Pest\Prophecy\exact;
+use function Pest\Prophecy\in;
+use function Pest\Prophecy\is;
+use function Pest\Prophecy\not;
+use function Pest\Prophecy\notIn;
+use function Pest\Prophecy\prophesize;
+use function Pest\Prophecy\reveal;
+use function Pest\Prophecy\size;
+use function Pest\Prophecy\that;
+use function Pest\Prophecy\type;
+use function Pest\Prophecy\which;
+use function Pest\Prophecy\withEntry;
+use function Pest\Prophecy\withEveryEntry;
+use function Pest\Prophecy\withKey;
 
 class ExampleArgument
 {
@@ -60,9 +75,10 @@ it('can be asserted with type()', function (): void {
 });
 
 it('can be asserted with that()', function (): void {
-    $callback = function(string $format): bool {
+    $callback = function (string $format): bool {
         expect($format)->toBe('format');
-        return $format === 'format';
+
+        return 'format' === $format;
     };
 
     prophesize(ExampleArgument::class)

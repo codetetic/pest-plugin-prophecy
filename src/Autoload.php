@@ -10,7 +10,9 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @template T of object
+ *
  * @phpstan-param class-string<T>|null $classOrInterface
+ *
  * @phpstan-return ($classOrInterface is null ? ObjectProphecy<object> : ObjectProphecy<T>)
  */
 function prophesize(?string $classOrInterface = null, string $key = ''): ObjectProphecy
@@ -20,7 +22,9 @@ function prophesize(?string $classOrInterface = null, string $key = ''): ObjectP
 
 /**
  * @template T of object
+ *
  * @phpstan-param class-string<T>|null $classOrInterface
+ *
  * @phpstan-return T
  */
 function reveal(?string $classOrInterface, string $key = ''): mixed
@@ -30,7 +34,9 @@ function reveal(?string $classOrInterface, string $key = ''): mixed
 
 /**
  * @template T of object
+ *
  * @phpstan-param class-string<T> $class
+ *
  * @phpstan-return T
  */
 function autowire(string $class, array $defaults = []): object

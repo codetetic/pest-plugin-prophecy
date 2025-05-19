@@ -1,6 +1,7 @@
 <?php
 
-use function Pest\Prophecy\{prophesize, reveal};
+use function Pest\Prophecy\prophesize;
+use function Pest\Prophecy\reveal;
 
 it('can be accessed as function', function (): void {
     expect(prophesize(stdClass::class))

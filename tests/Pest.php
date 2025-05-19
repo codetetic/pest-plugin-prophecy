@@ -1,3 +1,3 @@
 <?php
 
-uses(\Pest\Prophecy\ProphecyTrait::class)->in('Unit');
+uses(Pest\Prophecy\ProphecyTrait::class)->in('Unit');
