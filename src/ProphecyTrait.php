@@ -63,7 +63,7 @@ trait ProphecyTrait
                 isset($defaults[$name]) => $defaults[$name],
                 $type instanceof ReflectionNamedType && !$type->isBuiltin() => $this->baseProphesize($type->getName()),
                 $parameter->isDefaultValueAvailable() => $parameter->getDefaultValue(),
-                default => throw new InvalidArgumentException("Unable to autowire {$$classOrInterface}: {$name} with {$type} mock"),
+                default => throw new InvalidArgumentException("Unable to autowire {$classOrInterface}: {$name} with {$type} mock"),
             };
         }
 
