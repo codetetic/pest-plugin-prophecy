@@ -8,7 +8,7 @@ enum ExampleComplexEnum: string
     case TEST = 'test';
 }
 
-class ExampleComplex implements JsonSerializable
+class ExampleComplex
 {
     public function __construct(
         public DateTime $dateTime,
@@ -23,23 +23,6 @@ class ExampleComplex implements JsonSerializable
         public string $default = 'default',
         public DateTime $defaultDateTime = new DateTime('2000-01-01 00:00:00'),
     ) {
-    }
-
-    public function jsonSerialize(): mixed
-    {
-        return [
-            'dateTime' => $this->dateTime->format(DateTimeInterface::ATOM),
-            'dateTimeUnion' => $this->dateTimeUnion,
-            'dateTimeIntersection' => $this->dateTimeIntersection,
-            'string' => $this->string,
-            'int' => $this->int,
-            'float' => $this->float,
-            'bool' => $this->bool,
-            'array' => $this->array,
-            'enum' => $this->enum->value,
-            'default' => $this->default,
-            'defaultDateTime' => $this->defaultDateTime->format(DateTimeInterface::ATOM),
-        ];
     }
 }
 
@@ -68,8 +51,20 @@ it('can be a complex autowire', function (): void {
         ->shouldBeCalled()
         ->willReturn('formatted2');
 
-    expect($object)
-        ->toMatchSnapshot();
+    expect(
+        [
+            'dateTime' => $object->dateTime->format(DateTimeInterface::ATOM),
+            'dateTimeUnion' => $object->dateTimeUnion,
+            'dateTimeIntersection' => $object->dateTimeIntersection,
+            'string' => $object->string,
+            'int' => $object->int,
+            'float' => $object->float,
+            'bool' => $object->bool,
+            'array' => $object->array,
+            'enum' => $object->enum->value,
+            'default' => $object->default,
+            'defaultDateTime' => $object->defaultDateTime->format(DateTimeInterface::ATOM),
+    ])->toMatchSnapshot();
 
     expect(
         [
