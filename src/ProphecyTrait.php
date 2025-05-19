@@ -12,7 +12,9 @@ use ReflectionNamedType;
 
 trait ProphecyTrait
 {
-    use \Prophecy\PhpUnit\ProphecyTrait;
+    use \Prophecy\PhpUnit\ProphecyTrait {
+        prophesize as baseProphesize;
+    }
 
     protected array $arguments = [];
     protected array $prophecies = [];
@@ -22,10 +24,24 @@ trait ProphecyTrait
      * @phpstan-param class-string<T> $classOrInterface
      * @phpstan-return ObjectProphecy<T>
      */
-    protected function prophesizeWithCache(string $classOrInterface, string $key = ''): ObjectProphecy
+    protected function prophesize(string $classOrInterface = null, string $key = ''): ObjectProphecy
     {
-        $this->prophecies[$classOrInterface] = $this->prophesize($classOrInterface);
+        if (isset($this->prophecies[$classOrInterface . $key])) {
+            throw new InvalidArgumentException('Prophecy already exists.');
+        }
+
+        $this->prophecies[$classOrInterface . $key] = $this->baseProphesize($classOrInterface);
         return $this->prophecies[$classOrInterface];
+    }
+
+    /**
+     * @template T of object
+     * @phpstan-param class-string<T> $classOrInterface
+     * @phpstan-return T|null
+     */
+    protected function getProphecy(string $classOrInterface, string $key = ''): ?ObjectProphecy
+    {
+        return $this->prophecies[$classOrInterface . $key] ?? null;
     }
 
     /**
@@ -33,15 +49,10 @@ trait ProphecyTrait
      * @phpstan-param class-string<T> $classOrInterface
      * @phpstan-return T
      */
-    protected function getProphecy(string $classOrInterface, string $key = ''): ?ObjectProphecy
-    {
-        return $this->prophecies[$classOrInterface];
-    }
-
-    protected function autowire(string $class, array $defaults = []): object
+    protected function autowire(string $classOrInterface, array $defaults = []): object
     {
         $this->arguments = [];
-        $reflected = new ReflectionClass($class);
+        $reflected = new ReflectionClass($classOrInterface);
 
         $parameters = $reflected->getConstructor()?->getParameters() ?? [];
         foreach ($parameters as $parameter) {
@@ -50,9 +61,9 @@ trait ProphecyTrait
 
             $this->arguments[$name] = match (true) {
                 isset($defaults[$name]) => $defaults[$name],
-                $type instanceof ReflectionNamedType && !$type->isBuiltin() => $this->prophesize($type->getName()),
+                $type instanceof ReflectionNamedType && !$type->isBuiltin() => $this->baseProphesize($type->getName()),
                 $parameter->isDefaultValueAvailable() => $parameter->getDefaultValue(),
-                default => throw new InvalidArgumentException("Unable to autowire {$class}: {$name} with {$type} mock"),
+                default => throw new InvalidArgumentException("Unable to autowire {$$classOrInterface}: {$name} with {$type} mock"),
             };
         }
 
@@ -66,10 +77,7 @@ trait ProphecyTrait
 
     protected function getArgument(string $key): mixed
     {
-        if (isset($this->arguments[$key])) {
-            return $this->arguments[$key];
-        }
-        return null;
+        return $this->arguments[$key] ?? null;
     }
 
     #[After]

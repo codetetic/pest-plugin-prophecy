@@ -15,15 +15,15 @@ use Prophecy\Prophecy\ObjectProphecy;
  */
 function prophesize(?string $classOrInterface = null, string $key = ''): ObjectProphecy
 {
-    return test()->prophesizeWithCache($classOrInterface, $key);
+    return test()->prophesize($classOrInterface, $key);
 }
 
 /**
  * @template T of object
- * @phpstan-param class-string<T> $classOrInterface
+ * @phpstan-param class-string<T>|null $classOrInterface
  * @phpstan-return T
  */
-function reveal(string $classOrInterface, string $key = ''): mixed
+function reveal(?string $classOrInterface, string $key = ''): mixed
 {
     return test()->getProphecy($classOrInterface, $key)->reveal();
 }
