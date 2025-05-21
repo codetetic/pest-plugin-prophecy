@@ -21,6 +21,14 @@ composer require --dev codetetic/pest-plugin-prophecy
 
 This plugin provides a set of functions to enhance the Pest testing framework with Prophecy capabilities.
 
+### Setup
+
+```php
+// Pest.php
+
+uses(Pest\Prophecy\ProphecyTrait::class)->in('Unit');
+```
+
 ### Example Tests
 
 Below are some example tests that demonstrate the features of this plugin:
