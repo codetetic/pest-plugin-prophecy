@@ -1,0 +1,29 @@
+name: DevEnv Tests
+
+on:
+  push:
+    branches: [ "develop" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: locked
+          composer-options: "--prefer-dist --ignore-platform-reqs --optimize-autoloader"
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          nix_path: nixpkgs=channel:nixos-25.05
+
+      - uses: cachix/cachix-action@v16
+        with:
+          name: codetetic-php
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+      - name: Run devenv tests
+        run: nix run nixpkgs#devenv test
