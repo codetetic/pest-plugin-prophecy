@@ -1,10 +1,11 @@
 {
   pkgs,
+  lib,
   ...
 }:
 
 {
-  cachix.enable = false;
+  cachix.enable = lib.mkDefault false;
 
   languages.php = {
     enable = true;
